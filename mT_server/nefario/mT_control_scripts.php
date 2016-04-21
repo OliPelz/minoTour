@@ -2,7 +2,9 @@
 ### A simple PHP parsing file to call the functions contained within jsonfunctions.php.
 ### Parameters for this file are set in the file mT_param.conf which should be in the same folder as this file.
 
-$lines = file('mT_param.conf');
+$minoTourCtrlPath = (getenv('MT_PROCESSOR_PATH')) ? getenv('MT_PROCESSOR_PATH') : dirname(__FILE__);
+
+$lines = file($minoTourCtrlPath . '/mT_param.conf');
 foreach ($lines as $line_num => $line) {
 	$line = str_replace("\n", '', $line);
     $fragments = explode("=", $line);

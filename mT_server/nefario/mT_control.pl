@@ -7,12 +7,16 @@ use Cache::Memcached;
 use Parallel::Loops;
 use Getopt::Long;
 use Data::Dumper;
+use File::Basename;
 
+
+# get the path where all the minoTour processing scripts mT_xxx are located at (or use the path where this script is located)
+my $minoTourCtrlPath = $ENV{'MT_PROCESSOR_PATH'} || dirname(__FILE__);
 
 ## Import variables from mT_param.conf
 ## This file allows us to set global parameters for the mT_control package
 
-my $file = "mT_param.conf";
+my $file = $minoTourCtrlPath . "/mT_param.conf";
 open (FH, "< $file") or die "Can't open $file for read: $!";
 my @lines;
 while (<FH>) {
@@ -130,7 +134,7 @@ while (42) {#If you have to ask the significance of 42 you shouldn't be reading 
 				jobs($ref->{runname},$_,$ref->{reflength},$ref->{minup_version});
 			}
 			##proc_align($ref->{runname},$dbh);
-			my $aligncommand = "perl mT_align.pl " . $ref->{runname} . " &";
+			my $aligncommand = "perl " . $minoTourCtrlPath . "/mT_align.pl " . $ref->{runname} . " &";
 			if ($verbose){
 				print $aligncommand . "\n";
 			}
@@ -174,7 +178,7 @@ sub jobs {
 		}
 
 		##At the moment waits for script to complete before calculating next - need to check if process still running and not execute new version until it has finished...
- 	    my $command = $phploc . "php mT_control_scripts.php " . "dbname=$dbname jobname=$jobname reflength=$reflength prev=0 minupversion=$minupversion &";
+ 	    my $command = $phploc . "php " . $minoTourCtrlPath  . "/mT_control_scripts.php " . "dbname=$dbname jobname=$jobname reflength=$reflength prev=0 minupversion=$minupversion &";
 
         system($command);
     } else {

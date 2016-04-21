@@ -7,6 +7,11 @@ use Cache::Memcached;
 use Parallel::Loops;
 use Getopt::Long;
 use Data::Dumper;
+use File::Basename;
+
+
+# get the path where all the minoTour processing scripts mT_xxx are located at (or use the path where this script is located)
+my $minoTourCtrlPath = $ENV{'MT_PROCESSOR_PATH'} || dirname(__FILE__);
 
 
 
@@ -18,7 +23,7 @@ if ($#ARGV!=0) {
 ## Import variables from mT_param.conf
 ## This file allows us to set global parameters for the mT_control package
 
-my $file = "mT_param.conf";
+my $file = $minoTourCtrlPath . "/mT_param.conf";
 open (FH, "< $file") or die "Can't open $file for read: $!";
 my @lines;
 while (<FH>) {
